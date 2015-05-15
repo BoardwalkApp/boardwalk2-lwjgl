@@ -133,6 +133,8 @@ public final class Sys {
 				return new WindowsSysImplementation();
 			case LWJGLUtil.PLATFORM_MACOSX:
 				return new MacOSXSysImplementation();
+			case LWJGLUtil.PLATFORM_POTATO:
+				return new PotatoSysImplementation();
 			default:
 				throw new IllegalStateException("Unsupported platform");
 		}

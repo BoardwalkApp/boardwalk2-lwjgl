@@ -159,6 +159,8 @@ public final class Display {
 				return new WindowsDisplay();
 			case LWJGLUtil.PLATFORM_MACOSX:
 				return new MacOSXDisplay();
+			case LWJGLUtil.PLATFORM_POTATO:
+				return new PotatoDisplay();
 			default:
 				throw new IllegalStateException("Unsupported platform");
 		}

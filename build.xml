@@ -36,6 +36,7 @@
 		<mkdir dir="${lwjgl.temp}/native/openbsd"   taskname="initialiazing temp/openbsd folder" />
 		<mkdir dir="${lwjgl.temp}/native/macosx"    taskname="initialiazing temp/macosx folder" />
 		<mkdir dir="${lwjgl.temp}/native/solaris"   taskname="initialiazing temp/solaris folder" />
+		<mkdir dir="${lwjgl.temp}/native/potato"     taskname="initialiazing temp/potato folder" />
 	</target>
 
 	<!-- Cleans up any files created during the execution of this script -->
@@ -265,6 +266,11 @@
 				<patternset refid="lwjgl-solaris.fileset" />
 			</fileset>
 		</copy>
+		<copy todir="${lwjgl.temp}/native/potato">
+			<fileset dir="${lwjgl.lib}/potato">
+				<patternset refid="lwjgl-potato.fileset" />
+			</fileset>
+		</copy>
 
 		<!-- create base package -->
 		<zip destfile="${lwjgl.dist}/lwjgl-${lwjgl.version}.zip">
@@ -480,7 +486,7 @@
 	</target>
 
 	<target name="compile_native" depends="-initialize, headers, touch-version, version-mismatch" description="Compiles the native files">
-		<condition property="lwjgl.platform.windows">
+<!--		<condition property="lwjgl.platform.windows">
 			<os family="windows" />
 		</condition>
 		<antcall target="-compile_native_win32" />
@@ -508,7 +514,9 @@
 		<condition property="lwjgl.platform.macosx">
 			<os name="Mac OS X" />
 		</condition>
-		<antcall target="-compile_native_macosx" />
+		<antcall target="-compile_native_macosx" />-->
+		<property name="lwjgl.platform.potato" value="true"/>
+		<antcall target="-compile_native_potato" />
 	</target>
 
 	<!-- Compiles LWJGL on Win32 platforms  -->
@@ -561,6 +569,15 @@
 		<ant antfile="platform_build/macosx_ant/build.xml" inheritAll="false"/>
 		<copy file="${lwjgl.bin}/lwjgl/liblwjgl.dylib" todir="${lwjgl.lib}/macosx"/>
 		<version-check platform="macosx"/>
+	</target>
+
+	<!-- Compiles LWJGL on Linux platforms -->
+	<target name="-compile_native_potato" if="lwjgl.platform.potato">
+		<ant antfile="platform_build/potato_ant/build.xml" inheritAll="false"/>
+		<copy todir="${lwjgl.lib}/potato">
+			<fileset dir="${lwjgl.bin}/lwjgl" includes="liblwjgl*.so"/>
+		</copy>
+		<!-- headless issues <version-check platform="linux"/> -->
 	</target>
 
 	<target name="compile_native_es" depends="-initialize, headers, touch-version, version-mismatch" description="Compiles the native files">
