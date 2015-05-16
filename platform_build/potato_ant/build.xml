@@ -6,7 +6,7 @@
 	<property name="libname64" value="liblwjgl64.so"/>
 	<property name="libs32" value="-lm -lpthread" />
 	<property name="libs64" value="-lm -lpthread" />
-	<property name="cflags32" value="-O2 -Wall -c -fPIC -std=c99 -Wunused"/>
+	<property name="cflags32" value="-O2 -Wall -c -fPIC -std=c99 -Wunused -DPLATFORM_POTATO"/>
 
 	<target name="clean">
 		<delete>

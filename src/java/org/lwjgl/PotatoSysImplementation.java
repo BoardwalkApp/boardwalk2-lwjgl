@@ -47,6 +47,10 @@ public class PotatoSysImplementation extends DefaultSysImplementation {
 		return 19;
 	}
 
+	public int getJNIVersion() {
+		return 19;
+	}
+
 	public long getTime() {
 		return System.currentTimeMillis();
 	}
