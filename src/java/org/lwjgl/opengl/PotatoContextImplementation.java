@@ -50,12 +50,11 @@ import org.lwjgl.opengles.EGLSurface;
  */
 public final class PotatoContextImplementation implements ContextImplementation {
 
-/*
-	public static EGLDisplay display;
-	public static EGLSurface draw;
-	public static EGLSurface read;
-	public static EGLContext context;
-*/
+	public static long eglDisplay;
+	public static long eglDrawSurface;
+	public static long eglReadSurface;
+	public static long eglContext;
+
 	public static boolean current = true;
 
 	public ByteBuffer create(PeerInfo peer_info, IntBuffer attribs, ByteBuffer shared_context_handle) throws LWJGLException {
@@ -66,9 +65,8 @@ public final class PotatoContextImplementation implements ContextImplementation 
 	}
 
 	public void swapBuffers() throws LWJGLException {
-		//TODO: egl swap buffers
 		// do this or nothing will show up!
-		//EGL.eglSwapBuffers(display, draw);
+		PotatoEGL.eglSwapBuffers(eglDisplay, eglDrawSurface);
 	}
 
 	public void releaseCurrentContext() throws LWJGLException {
@@ -79,7 +77,11 @@ public final class PotatoContextImplementation implements ContextImplementation 
 	}
 
 	public void makeCurrent(PeerInfo peer_info, ByteBuffer handle) throws LWJGLException {
-		//EGL.eglMakeCurrent(display, draw, read, context);
+		eglDisplay = PotatoEGL.getAndroidDisplay();
+		eglDrawSurface = PotatoEGL.getAndroidDrawSurface();
+		eglReadSurface = PotatoEGL.getAndroidReadSurface();
+		eglContext = PotatoEGL.getAndroidContext();
+		PotatoEGL.eglMakeCurrent(eglDisplay, eglDrawSurface, eglReadSurface, eglContext);
 		current = true;
 	}
 
