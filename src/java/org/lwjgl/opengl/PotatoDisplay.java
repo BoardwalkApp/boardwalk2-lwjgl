@@ -100,6 +100,7 @@ public final class PotatoDisplay implements DisplayImplementation {
 
 	private static final ByteBuffer keyboardEvent = ByteBuffer.allocate(Keyboard.EVENT_SIZE);
 	private static final byte[] key_down_buffer = new byte[Keyboard.KEYBOARD_SIZE];
+	private static PotatoInputEventReceiver receiver;
 
 
 	private Keyboard keyboard;
@@ -208,6 +209,7 @@ public final class PotatoDisplay implements DisplayImplementation {
 	public void grabMouse(boolean new_grab) {
 		System.out.println("Grab: " + new_grab);
 		grab = new_grab;
+		receiver.setGrab(new_grab);
 	}
 
 	private boolean shouldWarpPointer() {
@@ -374,6 +376,22 @@ public final class PotatoDisplay implements DisplayImplementation {
 
 	public float getPixelScaleFactor() {
 		return 1.0f;
+	}
+
+	private static void createReceiver() {
+		try {
+			windowWidth = Integer.parseInt(System.getenv("POTATO_WINDOW_WIDTH"));
+			windowHeight = Integer.parseInt(System.getenv("POTATO_WINDOW_HEIGHT"));
+			receiver = new PotatoInputEventReceiver();
+			receiver.init(Integer.parseInt(System.getenv("INPUT_SENDER_PORT")));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		System.out.println("Window width: " + windowWidth + " window height: " + windowHeight);
+	}
+
+	static {
+		createReceiver();
 	}
 
 }
